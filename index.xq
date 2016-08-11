@@ -12,6 +12,7 @@ let $content :=
     <div>
         <ul>
             <li><a href="quarterly-release.xq">Quarterly release helper</a></li>
+            <li><a href="ebook-batch.xq">Ebook batch generator</a></li>
         </ul>
     </div>
 return

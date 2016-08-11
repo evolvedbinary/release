@@ -3,9 +3,7 @@ xquery version "3.0";
 (:~   This module uses XQuery 'typeswitch' to do all of the FRUS TEI-to-HTML
  :      conversion that we previously did with an XSLT stylesheet (frusteidoc2html.xsl).
  :
- :      To use this, include the module, i.e.
-            import module namespace render = "http://history.state.gov/ns/tei-render" at "/db/history/includes/tei-render.xqm";
- :      and pass the TEI fragment to render:render() as
+      and pass TEI fragments to render:render() as
             render:render($teiFragment, $options)
  :      where $options contains parameters and other info in an element like:
             <parameters>
@@ -17,15 +15,6 @@ xquery version "3.0";
  :      Author: Joe Wicentowski
  :      Version: 1.0 (Mar 6, 2009)
  :)
-
-(:
-    TODO write a 'test suite' demonstrating each TEI element
-    TODO adapt & update comments from the old XSLT
-    TODO make function type declarations more uniform
-    TODO investigate using html namespace and an XQuery equivalent to the XSL @exclude-result-prefixes
-    TODO investigate ways to time which is faster, this or the XSLT
-    TODO reexamine cardinality of each function, see if we can't catch coding errors with schema
-:)
 
 module namespace render="http://history.state.gov/ns/xquery/tei-render";
 
