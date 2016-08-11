@@ -9,6 +9,6 @@
     <type>application</type>
     <target>release</target>
     <prepare>pre-install.xql</prepare>
-    <finish/>
+    <finish>post-install.xql</finish>
     <permissions xmlns:repo="http://exist-db.org/xquery/repo" password="" user="hsg" group="hsg" mode="rw-rw-r--"/>
 </meta>
