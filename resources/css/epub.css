@@ -1,0 +1,184 @@
+body {
+    font-family: Palatino, Georgia, "Times New Roman", Times, serif;
+}
+
+/* ====Table of Contents==== */
+/* ====1. FRUS Document div Styles==== */
+/* ====2. FRUS Paragraph Styles==== */
+/* ====3. FRUS Footnote Styles ==== */
+/* ====4. FRUS List & Index Styles ==== */
+/* ====5. Bibliography Styles ==== */
+/* ====6. Tables ==== */
+/* ====7. Links ==== */
+
+/* ====1. FRUS Document div Styles==== */
+/* For ePubs, we use each device's default for divs */
+
+/* ====2. FRUS Paragraph Styles==== */
+/* Approximate print volume styles */
+p.sourceheadcenterboldbig {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 2px;
+}
+p.sourcearchiveboldbig {
+    font-weight: bold;
+    font-size:1.12em;
+}
+p.sourceparagraphspaceafter {
+    padding: 4px 0 0 0;
+}
+p.sourceparagraphfullindent {
+    margin-left: 20px;
+}
+p.sourceparagraphtightspacing {
+    line-height: 1em;
+}
+p.sourceparagraphbibliography {
+    padding-left: 4em;
+}
+ul.sourceparagraphbibliography {
+    padding-left: 10em;
+}
+p.dateline {
+    text-align: right
+}
+p.center {
+    text-align:center
+}
+p.right {
+    text-align: right
+}
+p.flushleft {
+    text-align: left;
+}
+p.closer {
+    text-align: right;
+}
+p.closer span.signed {
+    font-weight: bold
+}
+p.closer span.signed em {
+    font-weight: normal;
+    font-style: italic;
+}
+p.sectiontitleital {
+    font-style: italic;
+    margin-top: 2em;
+}
+p.sectiontitlebold {
+    font-weight: bold;
+    margin-top: 2em;
+}
+span.strikethrough {
+	text-decoration:line-through
+}
+
+/* ====3. FRUS Footnote Styles ==== */
+/* sup is used for footnote reference numbers */
+sup {
+    vertical-align: super;
+    font-size: smaller;
+    line-height: 0em;
+}
+/* prevents sourcenotes from inheriting bold styling of document titles */
+div.footnotes, div.footnotes p {
+    font-weight: normal;
+    font-size: .973em;
+}
+hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:.1em;margin:0 0 1.45em;border:none;}
+hr.space {background:#fff;color:#fff;}
+
+/* ====4. FRUS List & Index Styles ==== */
+/* FRUS lists by default have no bullets.
+   Whereas HTML typically asserts list indentation as a ul property, we do it as a li property.
+   This allows us to move some lists leftward help with tei:list/tei:head */
+blockquote { 
+    padding-left: 2em; 
+    margin-left: 0 
+}
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+li {
+    padding-left: 1em;
+    text-indent: -1em; 
+}
+ul.bulleted {
+    list-style-type: disc;
+    margin-left: 2em;
+}
+ul.bulleted li {
+    padding-left: 0em;
+    margin-left: 0em;
+    text-indent: 0em;
+    padding-bottom: .75em;
+}
+/* Persons, Terms, and Index lists are flush left, and hanging lines are indented */
+#sources li, #persons li, #terms li, #index li, #table-of-contents li {
+    padding-left: 2em;
+    text-indent: -2em; 
+}
+/* give TOC a little extra vertical space*/
+#table-of-contents li{
+    padding-top: .2em;
+    padding-bottom: .2em;
+}
+/* "Subject" lists are small caps with space below */
+ul.subject {
+    font-size: .9em;
+    margin-left: 0;
+}
+ul.subject li {
+    text-indent: -2em;
+    padding-left: 4em;
+}
+ul.subject li.subjectallcaps {
+    text-indent: 0;
+    padding-left: 0;
+    font-variant: small-caps;
+}
+/* for 1952-54 subjects - TODO: test once 1st volume is received */
+li.subjectflushleft {
+    padding-bottom: 1em;
+}
+ul.subject li ul {
+    padding-bottom: 1em;
+}
+p.subjectallcaps {
+    font-size: smaller;
+    font-variant: small-caps;
+}
+p.subjectentry {
+    padding: 0 0 0 30px;
+    font-size: smaller;
+    margin: 0
+}
+
+/* ====5. Bibliographies ==== */
+ul.bibl {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+ul.bibl li {
+    padding-left: 2em;
+    text-indent: -2em;
+}
+/* ====6. Tables ==== */
+td.label {
+    font-weight: bold;
+}
+tr.label {
+    font-weight: bold;
+}
+
+/* ====7. Links ==== */
+/* show icon for external links */
+a[href ^='http://'] {
+    padding-right: 13px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJADEIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") no-repeat scroll right center transparent;
+}
