@@ -193,7 +193,7 @@ let $body :=
                 <p>Please enter volume IDs, one per line. (Click <a href="?volumes=frus1949v01&amp;format=epub">here</a> to try generating frus1949v01 as an epub.)</p>,
                 <p>Before generating Mobi-bound EPUBs, make sure you have installed <a href="http://calibre-ebook.com/download">Calibre</a>.</p>,
                 <p>Generating an ebook can take as much as 5-10 minutes each. Open the Monex <a href="/apps/monex/console.html">Console</a> to follow status updates. If an ebook job is taking too long to generate, you can kill the entire query via the Monex <a href="/apps/monex/index.html">Monitoring</a> tab, under "Running Queries."</p>,
-                <p>Ebooks are saved on your hard disk at: <a href="file://{$output-directory}">{$output-directory}</a> (copy and paste this link into a new tab to view the directory, or navigate to it on your desktop).</p>
+                <p>Ebooks are saved on your hard disk at: <code>{$output-directory}</code>.</p>
                 )
         }
     </div>
