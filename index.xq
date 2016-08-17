@@ -11,8 +11,9 @@ let $title := 'Release'
 let $content :=
     <div>
         <ul>
-            <li><a href="quarterly-release.xq">Quarterly release helper</a></li>
             <li><a href="ebook-batch.xq">Ebook batch generator</a></li>
+            <li><a href="quarterly-release.xq">Quarterly release helper</a></li>
+            <li><a href="s3-cache.xq">S3 cache helper</a></li>
         </ul>
     </div>
 return
