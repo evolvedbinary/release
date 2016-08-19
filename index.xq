@@ -20,9 +20,17 @@ let $title := 'Release'
 let $content :=
     <div>
         <ul>
-            <li><a href="ebook-batch.xq">Ebook batch generator</a></li>
-            <li><a href="quarterly-release.xq">Quarterly release helper</a></li>
-            <li><a href="s3-cache.xq">S3 cache helper</a>{ if (local:aws-config-installed()) then () else <span class="text-warning"> (S3 app isn't configured yet. See <a href="../s3">S3</a>.)</span>}</li>
+            <li><a href="shell-file.xq">Shell File Helper</a></li>
+            <li><a href="ebook-batch.xq">Ebook Batch Helper</a></li>
+            <li><a href="quarterly-release.xq">Quarterly Release Helper</a></li>
+            <li><a href="s3-cache.xq">S3 Cache Helper</a>
+                { 
+                    if (local:aws-config-installed()) then 
+                        () 
+                    else 
+                        <span class="text-warning"> (S3 app isn't configured yet. See <a href="../s3">S3</a>.)</span>
+                }
+            </li>
         </ul>
     </div>
 return
