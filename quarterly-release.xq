@@ -37,7 +37,7 @@ declare function local:format-integer($integer as xs:integer) {
 };
 
 declare function local:one-volume-tweet($vol-id as xs:string) {
-    let $title := concat('Foreign Relations, ', string-join((frus:volume-title($vol-id, 'subseries'), frus:volume-title($vol-id, 'volume'), replace(frus:volume-title($vol-id, 'volumenumber'), 'Volume', 'Vol.')), ', '))
+    let $title := concat('Foreign Relations, ', string-join((frus:volume-title($vol-id, 'sub-series'), frus:volume-title($vol-id, 'volume'), replace(frus:volume-title($vol-id, 'volume-number'), 'Volume', 'Vol.')), ', '))
     let $link := local:link($vol-id)
     let $text := concat('Now available: ', $title, ' ', $link)
     return
@@ -126,15 +126,15 @@ declare function local:press-release($vol-ids as xs:string+) {
             <p>The Department of State today announces the release of newly digitized versions of {$volume-count-english} volumes from the <em>Foreign Relations of the United States</em> series, the official documentary record of U.S. foreign relations. These volumes cover events that took place {$coverage-dates} and were originally published in print {$publication-dates}:</p>
             <div>{
                 for $vols in collection('/db/apps/volumes/bibliography')/volume[@id = $vol-ids]
-                group by $subseries := normalize-space($vols/title[@type='sub-series'])
+                group by $sub-series := normalize-space($vols/title[@type='sub-series'])
                 order by $vols[1]/title[@type='sub-series']/@n
                 return
                     (
                     let $series-title := frus:volume-title($vols[1]/@id, 'series')
-                    let $subseries-title := frus:volume-title($vols[1]/@id, 'subseries')
+                    let $sub-series-title := frus:volume-title($vols[1]/@id, 'sub-series')
                     return
                         <p>
-                            <b><i>{$series-title, if ($subseries-title) then ',' else ()}</i> {if ($subseries-title) then $subseries-title else ()}</b>
+                            <b><i>{$series-title, if ($sub-series-title) then ',' else ()}</i> {if ($sub-series-title) then $sub-series-title else ()}</b>
                         </p>
                         ,
                     <ol>{
@@ -144,7 +144,7 @@ declare function local:press-release($vol-ids as xs:string+) {
                         let $published-year := doc(concat('/db/apps/volumes/bibliography', $vol-id, '.xml'))/volume/published-year
                         let $title :=
                             string-join(
-                                (frus:volume-title($vol-id, 'volume'), frus:volume-title($vol-id, 'volumenumber')),
+                                (frus:volume-title($vol-id, 'volume'), frus:volume-title($vol-id, 'volume-number')),
                                 ', '
                                 )
                         order by $vol-id

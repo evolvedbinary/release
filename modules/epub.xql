@@ -90,7 +90,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
     let $images-collection := concat($epub:cache-collection, '/', $vol-id, '/images')
     let $item := doc($path-to-tei-document)
     let $titles := $item//tei:titleStmt/tei:title
-    let $title := normalize-space(concat($titles[@type eq 'volume'], ' (', string-join(($titles[@type eq 'series'], $titles[@type eq 'subseries'], $titles[@type eq 'volumenumber'])[. ne ''], ', '), ')'))
+    let $title := normalize-space(concat($titles[@type eq 'volume'], ' (', string-join(($titles[@type eq 'series'], $titles[@type eq 'sub-series'], $titles[@type eq 'volume-number'])[. ne ''], ', '), ')'))
     let $creator := 'Office of the Historian, Bureau of Public Affairs, United States Department of State'
     let $text := $item//tei:text
     let $urn := concat($vol-id, '-', current-dateTime())
@@ -318,9 +318,9 @@ declare function epub:title-xhtml-entry($volume-id) {
     let $published-year := $volume/published-year/string()
     let $body :=
         <div xmlns="http://www.w3.org/1999/xhtml" id="title">
-            <h3>{concat(frus:volume-title($volume-id, 'series'), ', ', frus:volume-title($volume-id, 'subseries'))}</h3>
+            <h3>{concat(frus:volume-title($volume-id, 'series'), ', ', frus:volume-title($volume-id, 'sub-series'))}</h3>
             <hr/>
-            <h3>{frus:volume-title($volume-id, 'volumenumber')}</h3>
+            <h3>{frus:volume-title($volume-id, 'volume-number')}</h3>
             <h1>{frus:volume-title($volume-id, 'volume')}</h1>
             {
             if ($editors) then
