@@ -93,7 +93,7 @@ declare function local:tweets($vol-ids as xs:string*) {
 };
 
 declare function local:publication-date-range($vol-ids as xs:string+) {
-    let $published-years := collection('/db/apps/volumes/bibliography/')/volume[@id = $vol-ids]/published-year
+    let $published-years := collection('/db/apps/frus/bibliography/')/volume[@id = $vol-ids]/published-year
     let $start := min($published-years)
     let $end := max($published-years)
     return
@@ -104,7 +104,7 @@ declare function local:publication-date-range($vol-ids as xs:string+) {
 };
 
 declare function local:coverage-date-range($vol-ids as xs:string+) {
-    let $coverage := collection('/db/apps/volumes/bibliography')/volume[@id = $vol-ids]/coverage
+    let $coverage := collection('/db/apps/frus/bibliography')/volume[@id = $vol-ids]/coverage
     let $start := min($coverage)
     let $end := max($coverage)
     return
@@ -119,13 +119,13 @@ declare function local:press-release($vol-ids as xs:string+) {
     let $volume-count-english := local:format-integer($volume-count)
     let $publication-dates := local:publication-date-range($vol-ids)
     let $coverage-dates := local:coverage-date-range($vol-ids)
-    let $grouping-codes := doc('/db/apps/volumes/code-tables/grouping-code-table.xml')//item
+    let $grouping-codes := doc('/db/apps/frus/code-tables/grouping-code-table.xml')//item
     return
         <div>
             <h2>Press Release</h2>
             <p>The Department of State today announces the release of newly digitized versions of {$volume-count-english} volumes from the <em>Foreign Relations of the United States</em> series, the official documentary record of U.S. foreign relations. These volumes cover events that took place {$coverage-dates} and were originally published in print {$publication-dates}:</p>
             <div>{
-                for $vols in collection('/db/apps/volumes/bibliography')/volume[@id = $vol-ids]
+                for $vols in collection('/db/apps/frus/bibliography')/volume[@id = $vol-ids]
                 group by $sub-series := normalize-space($vols/title[@type='sub-series'])
                 order by $vols[1]/title[@type='sub-series']/@n
                 return
@@ -141,7 +141,7 @@ declare function local:press-release($vol-ids as xs:string+) {
                         for $vol in $vols
                         let $vol-id := $vol/@id
                         let $link := local:link($vol-id)
-                        let $published-year := doc(concat('/db/apps/volumes/bibliography', $vol-id, '.xml'))/volume/published-year
+                        let $published-year := doc(concat('/db/apps/frus/bibliography', $vol-id, '.xml'))/volume/published-year
                         let $title :=
                             string-join(
                                 (frus:volume-title($vol-id, 'volume'), frus:volume-title($vol-id, 'volume-number')),
