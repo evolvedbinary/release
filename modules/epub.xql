@@ -312,7 +312,7 @@ declare function epub:cover-xhtml-entry($title) {
     @return the entry for the OEBPS/cover.html file
 :)
 declare function epub:title-xhtml-entry($volume-id) {
-    let $volume := collection('/db/apps/volumes/bibiliography')/volume[@id eq $volume-id]
+    let $volume := collection('/db/apps/frus/bibiliography')/volume[@id eq $volume-id]
     let $editor-roles-to-display := ('primary', 'general')
     let $editors := $volume/editor[@role = $editor-roles-to-display and . ne '']
     let $published-year := $volume/published-year/string()

@@ -173,7 +173,7 @@ declare function frus:trace-count($hits as node()+) {
 };
 
 declare function frus:exists-volume($volumeid as xs:string) as xs:boolean {
-    exists(collection('/db/cms/apps/volumes/data')/volume[@id eq $volumeid])
+    exists(collection('/db/apps/frus/bibliography')/volume[@id eq $volumeid])
 };
 
 declare function frus:exists-volume-in-db($volumeid as xs:string) as xs:boolean {
@@ -197,7 +197,7 @@ declare function frus:volume-title($volumeids as xs:string+, $type as xs:string)
     	if (frus:exists-volume-in-db($volumeid)) then
     	    frus:volume($volumeid)//tei:title[@type = $type][1]/text()
         else
-            collection('/db/cms/apps/volumes/data')/volume[@id eq $volumeid]/title[@type eq $type]/text()
+            collection('/db/apps/frus/bibliography')/volume[@id eq $volumeid]/title[@type eq $type]/text()
 };
 
 declare function frus:volume-title($volumeids as xs:string+) as text()* {
@@ -207,7 +207,7 @@ declare function frus:volume-title($volumeids as xs:string+) as text()* {
     	if (frus:exists-volume-in-db($volumeid)) then
     	    frus:volume($volumeid)//tei:title[@type = 'complete']/text()
         else
-            collection('/db/cms/apps/volumes/data')/volume[@id eq $volumeid]/title[@type eq 'complete']/text()
+            collection('/db/apps/frus/bibliography')/volume[@id eq $volumeid]/title[@type eq 'complete']/text()
 };
 
 declare function frus:exists-id($volumeid as xs:string, $id as xs:string) as xs:boolean {
@@ -622,7 +622,7 @@ declare function frus:toc-link($secttitletext, $volume, $sectid, $viewstatus, $h
 };
 
 declare function frus:editor-role-to-label($role as xs:string, $form as xs:string) as xs:string {
-    let $item := doc('/db/cms/apps/volumes/code-tables/editor-role-codes.xml')//item[value = $role]
+    let $item := doc('/db/apps/frus/code-tables/editor-role-codes.xml')//item[value = $role]
     let $label :=
         if ($form = 'plural') then
             $item/label/plural
@@ -633,5 +633,5 @@ declare function frus:editor-role-to-label($role as xs:string, $form as xs:strin
 };
 
 declare function frus:editor-roles() as xs:string+ {
-    doc('/db/cms/apps/volumes/code-tables/editor-role-codes.xml')//value
+    doc('/db/apps/frus/code-tables/editor-role-codes.xml')//value
 };
