@@ -20,9 +20,9 @@ declare function local:generate-shell($vol-ids) {
                 <fileDesc>
                     <titleStmt>
                         <title type="complete">{normalize-space($vol/*:title[@type='complete'])}</title>
-                        <title type="series">{$vol/*:title[@type='series']/string()}</title>
-                        <title type="sub-series">{$vol/*:title[@type='sub-series']/string()}</title>
-                        <title type="volume-number">{normalize-space($vol/*:title[@type='volume-number'])}</title>
+                        <title type="series">{substring-before($vol/*:title[@type='sub-series'], ", ")}</title>
+                        <title type="sub-series">{substring-after($vol/*:title[@type='sub-series'], ", ")}</title>
+                        <title type="volume-number">{normalize-space($vol/*:title[@type='volumenumber'])}</title>
                         <title type="volume">{normalize-space($vol/*:title[@type='volume'])}</title>
                         {
                             if ($vol/*:editor[@role='primary'][. ne '']) then
@@ -39,14 +39,14 @@ declare function local:generate-shell($vol-ids) {
                     <publicationStmt>
                         <publisher>United States Government Publishing Office</publisher>
                         <pubPlace>Washington</pubPlace>
-                        <date>{($vol/*:public-target-publication-year[. ne '']/string(), '???')[1]}</date>
+                        <date>{($vol/*:published-year[. ne '']/string(), '???')[1]}</date>
                         <idno type="dospubno"></idno>
                         <idno type="isbn-10">{$vol/*:isbn10/string()}</idno>
-                        <idno type="isbn-13">{$vol/isbn13/string()}</idno>
+                        <idno type="isbn-13">{normalize-space($vol/*:isbn13)}</idno>
                         <idno type="frus">{$vol/@id/string()}</idno>
                         <idno type="oclc">{$vol/*:location[@loc='worldcat']/string()}</idno>
                     </publicationStmt>
-                    <sourceDesc><p>Released in {($vol/*:public-target-publication-year[. ne '']/string(), '???')[1]}</p></sourceDesc>
+                    <sourceDesc><p>Released in {($vol/*:published-year[. ne '']/string(), '???')[1]}</p></sourceDesc>
                 </fileDesc>
                 <revisionDesc>
                     <change>{format-date(current-date(), '[Y]-[M01]-[D01]')}: Created TEI shell</change>
@@ -56,9 +56,9 @@ declare function local:generate-shell($vol-ids) {
                 <front>
                     <titlePage>
                         <docTitle>
-                            <titlePart type="series">{substring-before($vol/*:title[@type='series'], ", ")}</titlePart>
+                            <titlePart type="series">{substring-before($vol/*:title[@type='sub-series'], ", ")}</titlePart>
                             <titlePart type="subseries">{substring-after($vol/*:title[@type='sub-series'], ", ")}</titlePart>
-                            <titlePart type="volumeno">{$vol/*:title[@type='volume-number']/string()}</titlePart>
+                            <titlePart type="volumeno">{$vol/*:title[@type='volumenumber']/string()}</titlePart>
                             <titlePart type="volumetitle">{$vol/*:title[@type='volume']/string()}</titlePart>
                         </docTitle>
                         <byline>
@@ -92,7 +92,7 @@ declare function local:generate-shell($vol-ids) {
                         <head>Press Release</head>
                         <p rend="right">
                             <hi rend="strong">Office of the Historian<lb/>Bureau of Public
-                                Affairs<lb/>United States Department of State<lb/>??? ???, {($vol/*:public-target-publication-year/string(), '???')[1]}</hi>
+                                Affairs<lb/>United States Department of State<lb/>??? ???, {($vol/*:published-year/string(), '???')[1]}</hi>
                         </p>
                         <p>This volume was compiled and edited by {
                             (
@@ -120,7 +120,7 @@ declare function local:generate-shell($vol-ids) {
                                 >https://history.state.gov/historicaldocuments/{$vol/@id/string()}</ref>. Copies
                             of the volume will be available for purchase from the U.S. Government Publishing
                             Office online at <ref target="http://bookstore.gpo.gov"
-                                >http://bookstore.gpo.gov</ref> (GPO S/N ???; ISBN {($vol/isbn13/string(), '???')[1]}), or by calling
+                                >http://bookstore.gpo.gov</ref> (GPO S/N ???; ISBN {(normalize-space($vol/*:isbn13), '???')[1]}), or by calling
                             toll-free 1-866-512-1800 (D.C. area 202-512-1800). For further information,
                             contact <ref target="mailto:history@state.gov">history@state.gov</ref>. </p>
                     </div>
