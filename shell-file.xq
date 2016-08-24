@@ -19,10 +19,10 @@ declare function local:generate-shell($vol-ids) {
                 <teiHeader>
                 <fileDesc>
                     <titleStmt>
-                        <title type="complete">{normalize-space($vol/*:title[@type='complete'])}</title>
-                        <title type="series">{substring-before($vol/*:title[@type='sub-series'], ", ")}</title>
-                        <title type="sub-series">{substring-after($vol/*:title[@type='sub-series'], ", ")}</title>
-                        <title type="volume-number">{normalize-space($vol/*:title[@type='volumenumber'])}</title>
+                       <title type="complete">{normalize-space($vol/*:title[@type='complete'])}</title>
+                        <title type="series">{$vol/*:title[@type='series']/string()}</title>
+                        <title type="sub-series">{$vol/*:title[@type='sub-series']/string()}</title>
+                        <title type="volume-number">{normalize-space($vol/*:title[@type='volume-number'])}</title>
                         <title type="volume">{normalize-space($vol/*:title[@type='volume'])}</title>
                         {
                             if ($vol/*:editor[@role='primary'][. ne '']) then
@@ -56,9 +56,9 @@ declare function local:generate-shell($vol-ids) {
                 <front>
                     <titlePage>
                         <docTitle>
-                            <titlePart type="series">{substring-before($vol/*:title[@type='sub-series'], ", ")}</titlePart>
-                            <titlePart type="subseries">{substring-after($vol/*:title[@type='sub-series'], ", ")}</titlePart>
-                            <titlePart type="volumeno">{$vol/*:title[@type='volumenumber']/string()}</titlePart>
+                            <titlePart type="series">{$vol/*:title[@type='series']/string()}</titlePart>
+                            <titlePart type="subseries">{$vol/*:title[@type='sub-series']/string()}</titlePart>
+                            <titlePart type="volumeno">{normalize-space($vol/*:title[@type='volume-number'])}</titlePart>
                             <titlePart type="volumetitle">{$vol/*:title[@type='volume']/string()}</titlePart>
                         </docTitle>
                         <byline>
