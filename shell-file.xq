@@ -88,8 +88,6 @@ declare function local:generate-shell($vol-ids) {
                             (866) 512-1800; DC area (202) 512-1800 Fax: (202) 512-2250 Mail: Stop IDCC,
                             Washington, DC 20402-0001</docImprint>
                     </titlePage>
-                </front>
-                <body>
                     <div xml:id="pressrelease" type="section">
                         <head>Press Release</head>
                         <p rend="right">
@@ -130,7 +128,8 @@ declare function local:generate-shell($vol-ids) {
                         <div xml:id="sources" type="section"/>
                         <div xml:id="terms" type="section"/>
                         <div xml:id="persons" type="section"/>-->
-                </body>
+                </front>
+                <body/>
                 <back/>
             </text>
         </TEI>
