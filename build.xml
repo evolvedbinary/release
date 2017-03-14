@@ -12,7 +12,7 @@
         </zip>
     </target>
     <target name="clean">
-        <delete>
+        <delete quiet="true">
             <fileset dir="${build.dir}">
                 <include name="*.xar"/>
             </fileset>
