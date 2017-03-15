@@ -358,7 +358,7 @@ declare function epub:title-xhtml-entry($volume-id) {
             </p>
             <hr/>
             <p>
-                This ebook was generated on {xsl:format-date(current-date(), 'MMMM D, YYYY')}.<br/>
+                This ebook was generated on {format-date(current-date(), "[MNn] [D1], [Y0001]")}.<br/>
                 Please visit the Office of the Historian <a href="http://history.state.gov/historicaldocuments/ebooks">ebooks web page</a> to access updates.
             </p>
         </div>
@@ -388,7 +388,7 @@ declare function epub:process-xhtml($node) {
         case text() return $node
         case element(xhtml:span) return
             if ($node/@class eq 'ho:generate-month-year') then
-                xsl:format-date(current-date(), 'MMMM YYYY')
+                format-date(current-date(), "[MNn] [Y0001]")
             else
                 element { node-name($node) } { epub:process-xhtml-recurse($node) }
         case element() return element { node-name($node) } { $node/@*, epub:process-xhtml-recurse($node) }
