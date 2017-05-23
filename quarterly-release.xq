@@ -173,7 +173,7 @@ declare function local:form($volumes as xs:string*) {
 declare function local:validate($vol-ids as xs:string*) {
     for $vol-id in $vol-ids
     return
-        if (frus:exists-volume-in-db($vol-id)) then ()
+        if (frus:exists-volume($vol-id)) then ()
         else $vol-id
 };
 
