@@ -75,7 +75,7 @@ declare function local:generate-shell($vol-ids) {
                             <hi rend="italic">General Editor</hi>: <name>{($vol/*:editor[@role="general"][. ne '']/string(), '???')[1]}</name>
                         </byline>
                         <docImprint>
-                            <publisher>United States Government Printing Office</publisher>
+                            <publisher>United States Government Publishing Office</publisher>
                             <pubPlace>Washington</pubPlace>
                             <docDate>{($vol/*:published-year[. ne '']/string(), '???')[1]}</docDate>
                             DEPARTMENT OF STATE O<hi rend="smallcaps">ffice</hi>
@@ -94,6 +94,7 @@ declare function local:generate-shell($vol-ids) {
                             <hi rend="strong">Office of the Historian<lb/>Bureau of Public
                                 Affairs<lb/>United States Department of State<lb/>??? ???, {($vol/*:published-year/string(), '???')[1]}</hi>
                         </p>
+                        <p>{($vol/*:summary/*:p [. ne '']/string(), '???')[1]}</p>
                         <p>This volume was compiled and edited by {
                             (
                                 let $editors := $vol/*:editor[@role="primary"][. ne '']
