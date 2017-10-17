@@ -1,0 +1,66 @@
+<fop version="1.0">
+    <renderers>
+        <renderer mime="application/pdf">
+            <fonts>
+                <font kerning="yes" embed-url="../resources/fonts/pala.ttf" sub-font="Palatino">
+                    <font-triplet name="Palatino" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palab.ttf" sub-font="Palatino Bold">
+                    <font-triplet name="Palatino" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palai.ttf" sub-font="Palatino Italic">
+                    <font-triplet name="Palatino" style="italic" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palabi.ttf" sub-font="Palatino Bold Italic">
+                    <font-triplet name="Palatino" style="italic" weight="bold"/>
+                </font>
+            </fonts>
+        </renderer>
+        <renderer mime="application/postscript">
+            <auto-rotate-landscape>false</auto-rotate-landscape>
+            <language-level>3</language-level>
+            <optimize-resources>true</optimize-resources>
+            <safe-set-page-device>false</safe-set-page-device>
+            <dsc-compliant>true</dsc-compliant>
+            <fonts>
+                <font kerning="yes" embed-url="../resources/fonts/pala.ttf" sub-font="Palatino" embedding-mode="full">
+                    <font-triplet name="Palatino" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palab.ttf" sub-font="Palatino Bold" embedding-mode="full">
+                    <font-triplet name="Palatino" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palai.ttf" sub-font="Palatino Italic" embedding-mode="full">
+                    <font-triplet name="Palatino" style="italic" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/palabi.ttf" sub-font="Palatino Bold Italic" embedding-mode="full">
+                    <font-triplet name="Palatino" style="italic" weight="bold"/>
+                </font>
+                <!--<font kerning="yes" embed-url="../resources/fonts/Times-Roman.ttf" sub-font="Times Roman" embedding-mode="full">
+                    <font-triplet name="Times" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Times-Bold.ttf" sub-font="Times Bold" embedding-mode="full">
+                    <font-triplet name="Times" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Times-Italic.ttf" sub-font="Times Italic" embedding-mode="full">
+                    <font-triplet name="Times" style="italic" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Times-BoldItalic.ttf" sub-font="Times Bold Italic" embedding-mode="full">
+                    <font-triplet name="Times" style="italic" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Courier.ttf" sub-font="Courier" embedding-mode="full">
+                    <font-triplet name="Courier" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Courier-Bold.ttf" sub-font="Courier Bold" embedding-mode="full">
+                    <font-triplet name="Courier" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Courier-Oblique.ttf" sub-font="Courier Oblique" embedding-mode="full">
+                    <font-triplet name="Courier" style="oblique" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="../resources/fonts/Courier-BoldOblique.ttf" sub-font="Courier Bold Oblique" embedding-mode="full">
+                    <font-triplet name="Courier" style="oblique" weight="bold"/>
+                </font>-->
+            </fonts>
+        </renderer>
+    </renderers>
+    <!--<hyphenation-pattern lang="en">en</hyphenation-pattern>-->
+</fop>
