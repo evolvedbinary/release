@@ -53,7 +53,7 @@ declare function epub:generate-epub($title, $creator, $text, $urn, $db-path-to-r
         console:log('starting epub:title-xhtml-entry (5/12)'), epub:title-xhtml-entry(substring-before(util:document-name($text), '.xml')),
         console:log('starting epub:about-xhtml-entry (6/12)'), epub:about-xhtml-entry(),
         console:log('starting epub:table-of-contents-xhtml-entry (7/12)'), epub:table-of-contents-xhtml-entry($title, $text, true(), $options),
-        console:log('starting epub:body-xhtml-entries (8/12) - may take a long time!'), epub:body-xhtml-entries($text, $filename, $options),
+        console:log('starting epub:body-xhtml-entries (8/12) - may take a long time!'), epub:body-xhtml-entries($text, $options),
         console:log('starting epub:stylesheet-entry (9/12)'), epub:stylesheet-entry($db-path-to-resources),
         console:log('starting epub:toc-ncx-entry (10/12)'), epub:toc-ncx-entry($urn, $title, $text),
         console:log('starting epub:cover-entry (11/12)'), epub:cover-entry($cover),
@@ -99,10 +99,11 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
         if (util:binary-doc-available(concat($images-collection, '/', $vol-id, '.jpg'))) then
             concat($images-collection, '/', $vol-id, '.jpg')
         else
-            let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/frus/', $vol-id, '/covers/', $vol-id, '.jpg')
-            let $response := httpclient:head(xs:anyURI($uri), false(), ())
+            let $href := concat('https://s3.amazonaws.com/static.history.state.gov/frus/', $vol-id, '/covers/', $vol-id, '.jpg')
+            let $request := <hc:request href="{$href}" method="head"/>
+            let $response := hc:send-request($request)
             return
-                if ($response/@statusCode eq '200') then
+                if ($response/@status eq '200') then
                     let $check-collection :=
                         if (xmldb:collection-available($images-collection)) then
                             ()
@@ -111,7 +112,10 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
                             xmldb:create-collection($epub:cache-collection, $vol-id),
                             xmldb:create-collection(concat($epub:cache-collection, '/', $vol-id), 'images')
                             )
-                    let $store := xmldb:store($images-collection, 'cover.jpg', xs:anyURI($uri), 'image/jpeg')
+                    let $request := <hc:request href="{$href}" method="get"/>
+                    let $response := hc:send-request($request)
+                    let $response-body := $response[2]
+                    let $store := xmldb:store($images-collection, 'cover.jpg', $response-body, 'image/jpeg')
                     return
                         concat($images-collection, '/cover.jpg')
                 else
@@ -125,9 +129,10 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
         let $mobi-dir := concat($file-system-output-dir, 'mobi-bound')
         let $mkdir := for $x in ($file-system-output-dir, $epub-dir, $mobi-dir) return if (file:exists($x)) then () else file:mkdir($x)
         let $filename := concat($vol-id, '.epub')
+        let $epub-zip := epub:generate-epub($title, $creator, $text, $urn, $db-path-to-resources, $cover-uri, $filename, $option)
         return
         file:serialize-binary(
-            epub:generate-epub($title, $creator, $text, $urn, $db-path-to-resources, $cover-uri, $filename, $option),
+            $epub-zip,
             <x>{concat($file-system-output-dir, if ($option = 'mobi') then 'mobi-bound/' else 'epub/', $filename)}</x>
             )
 };
@@ -434,7 +439,7 @@ declare function epub:table-of-contents-xhtml-entry($title, $text, $suppress-doc
     @param $text the tei:text element for the file, which contains the divs to be processed into the EPUB
     @return the serialized XHTML page, wrapped in an entry element
 :)
-declare function epub:body-xhtml-entries($text, $filename, $options) {
+declare function epub:body-xhtml-entries($text, $options) {
     let $divs := epub:frus-divs($text)
     let $div-count := count($divs)
     (: TODO only log at discrete points, like every 5% or 10% :)
@@ -445,6 +450,10 @@ declare function epub:body-xhtml-entries($text, $filename, $options) {
     let $title := frus:head-sans-note($div)
     let $body := epub:process-div($div, $title, $options)
     let $body-xhtml:= epub:assemble-xhtml($title, $body)
+    (: previously we cached/stashed $body-xhtml and then included it in the zip via 
+        <entry type="uri"> - as an attempt to "work around likely zip- and memory-related crashes" 
+        but that no longer works: :)
+    (:
     let $vol-id := substring-before(util:document-name($div), '.xml')
     let $xhtml-cache := concat($epub:cache-collection, '/', $vol-id, '/xhtml', if ($options = 'mobi') then '-mobi' else '-epub')
     let $check-collection :=
@@ -456,8 +465,9 @@ declare function epub:body-xhtml-entries($text, $filename, $options) {
             xmldb:create-collection(concat($epub:cache-collection, '/', $vol-id), concat('/xhtml', if ($options = 'mobi') then '-mobi' else '-epub'))
             )
     let $store := xmldb:store($xhtml-cache, concat($div/@xml:id, '.txt'), $body-xhtml)
+    :)
     return
-        <entry name="{concat('OEBPS/', $div/@xml:id, '.html')}" type="uri">{$store}</entry>
+        <entry name="{concat('OEBPS/', $div/@xml:id, '.html')}" type="xml">{$body-xhtml}</entry>
 };
 
 declare function epub:process-div($div as element(tei:div), $title, $options) {
@@ -530,13 +540,13 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
                     let $doctitle := frus:document-head-sans-number($document)
                     let $docsource := frus:source-note($document)/string()
                     let $docdateline := string-join(render:main(frus:dateline($document), <parameters xmlns=""><param name="strip-line-breaks" value="true"/></parameters>), '')
-                    let $docsummary := frus:document-summary($document)/string()
+                    let $docsummary := $document//tei:note[@type='summary']/string()
                     return
                         (
                         <hr class="list"/>,
                         <h4><a href="{concat($docid, '.html')}">{if (not(starts-with($document/tei:head, concat($document/@n, '.')))) then concat('[', $docnumber, ']') else concat($docnumber, '. '), $doctitle}</a></h4>,
                         <p class="dateline">{$docdateline}</p>,
-                        <p>{$docsummary}</p>,
+                        if (exists($docsummary)) then <p>{$docsummary}</p> else (),
                         <p class="sourcenote">{$docsource}</p>
                         )
                     ,
@@ -751,10 +761,14 @@ declare function epub:graphic-entries($text) {
 };
 
 declare function epub:cache-image($href, $target-collection, $filename) {
-    let $response := httpclient:head(xs:anyURI($href), false(), ())
+    let $request := <hc:request href="{$href}" method="head"/>
+    let $response := hc:send-request($request)
     return
-        if ($response/@statusCode eq '200') then
-            let $store := xmldb:store($target-collection, $filename, xs:anyURI($href), 'image/png')
+        if ($response/@status eq '200') then
+            let $request := <hc:request href="{$href}" method="get"/>
+            let $response := hc:send-request($request)
+            let $response-body := $response[2]
+            let $store := xmldb:store($target-collection, $filename, $response-body, 'image/png')
             return
                 concat($target-collection, '/', $filename)
         else
