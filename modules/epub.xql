@@ -574,7 +574,7 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
     @return the CSS entry
 :)
 declare function epub:stylesheet-entry($db-path-to-css) {
-    <entry name="OEBPS/stylesheet.css" type="uri">{concat($db-path-to-css, '/css/epub.css')}</entry>
+    <entry name="OEBPS/stylesheet.css" type="binary">{util:binary-doc(concat($db-path-to-css, '/css/epub.css'))}</entry>
 };
 
 
@@ -748,7 +748,7 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
     @return the cover entry
 :)
 declare function epub:cover-entry($cover-uri) {
-    <entry name="OEBPS/images/cover.jpg" type="uri">{$cover-uri}</entry>
+    <entry name="OEBPS/images/cover.jpg" type="binary">{util:binary-doc($cover-uri)}</entry>
 };
 
 declare function epub:graphic-entries($text) {
@@ -757,7 +757,7 @@ declare function epub:graphic-entries($text) {
     for $image-uri in $image-uris
     let $filename := substring-after($image-uri, 'images/')
     return
-        <entry name="{concat('OEBPS/images/', $filename)}" type="uri">{$image-uri}</entry>
+        <entry name="{concat('OEBPS/images/', $filename)}" type="binary">{util:binary-doc($image-uri)}</entry>
 };
 
 declare function epub:cache-image($href, $target-collection, $filename) {
