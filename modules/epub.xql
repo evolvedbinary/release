@@ -127,7 +127,6 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
     return
         let $epub-dir := concat($file-system-output-dir, 'epub')
         let $mobi-dir := concat($file-system-output-dir, 'mobi-bound')
-        let $mkdir := for $x in ($file-system-output-dir, $epub-dir, $mobi-dir) return if (file:exists($x)) then () else file:mkdir($x)
         let $filename := concat($vol-id, '.epub')
         let $epub-zip := epub:generate-epub($title, $creator, $text, $urn, $db-path-to-resources, $cover-uri, $filename, $option)
         return

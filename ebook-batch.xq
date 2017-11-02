@@ -19,11 +19,7 @@ declare function local:output-directory() {
 };
 
 declare function local:generate-mobis() {
-    let $script := '# create the destination directory
-
-mkdir mobi;
-
-# then we enter the source directory
+    let $script := '# enter the source directory
 
 cd mobi-bound;
 
@@ -54,6 +50,11 @@ declare function local:generate-ebooks($vol-ids, $format) {
     let $tei-content-data-path := concat('/db/apps/frus/volumes/', $vol, '.xml')
     let $file-system-output-dir := local:output-directory()
     let $formats := if ($format = 'all') then ('mobi-bound', 'epub') else $format
+    let $mkdirs := 
+        (
+            $file-system-output-dir, 
+            ('epub', 'mobi', 'mobi-bound') ! ($file-system-output-dir || .)
+        ) ! file:mkdirs(.)
     return
         for $f in $formats
         let $label := $local:ebook-format-options//item[value = $f]/label/string()
