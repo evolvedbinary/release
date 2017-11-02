@@ -100,7 +100,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
             concat($images-collection, '/', $vol-id, '.jpg')
         else
             let $href := concat('https://s3.amazonaws.com/static.history.state.gov/frus/', $vol-id, '/covers/', $vol-id, '.jpg')
-            let $request := <hc:request href="{$href}" method="head"/>
+            let $request := <hc:request href="{$href}" method="head" http-version="1.1"/>
             let $response := hc:send-request($request)
             return
                 if ($response/@status eq '200') then
@@ -112,7 +112,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
                             xmldb:create-collection($epub:cache-collection, $vol-id),
                             xmldb:create-collection(concat($epub:cache-collection, '/', $vol-id), 'images')
                             )
-                    let $request := <hc:request href="{$href}" method="get"/>
+                    let $request := <hc:request href="{$href}" method="get" http-version="1.1"/>
                     let $response := hc:send-request($request)
                     let $response-body := $response[2]
                     let $store := xmldb:store($images-collection, 'cover.jpg', $response-body, 'image/jpeg')
@@ -760,11 +760,11 @@ declare function epub:graphic-entries($text) {
 };
 
 declare function epub:cache-image($href, $target-collection, $filename) {
-    let $request := <hc:request href="{$href}" method="head"/>
+    let $request := <hc:request href="{$href}" method="head" http-version="1.1"/>
     let $response := hc:send-request($request)
     return
         if ($response/@status eq '200') then
-            let $request := <hc:request href="{$href}" method="get"/>
+            let $request := <hc:request href="{$href}" method="get" http-version="1.1"/>
             let $response := hc:send-request($request)
             let $response-body := $response[2]
             let $store := xmldb:store($target-collection, $filename, $response-body, 'image/png')
