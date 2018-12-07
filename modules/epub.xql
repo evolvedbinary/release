@@ -767,7 +767,7 @@ declare function epub:cache-image($href, $target-collection, $filename) {
             let $request := <hc:request href="{$href}" method="get" http-version="1.1"/>
             let $response := hc:send-request($request)
             let $response-body := $response[2]
-            let $store := xmldb:store($target-collection, $filename, $response-body, 'image/png')
+            let $store := xmldb:store($target-collection, xmldb:encode($filename), $response-body, 'image/png')
             return
                 concat($target-collection, '/', $filename)
         else
@@ -804,7 +804,7 @@ declare function epub:cache-all-images($text) {
                 if (util:binary-doc-available(concat($epub:cache-collection, '/', $graphic/@cache-path, '/', $graphic/@file))) then
                     concat($graphic/@cache-path, '/', $graphic/@file)
                 else
-                    let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/', $graphic/@s3-path, '/', $graphic/@file)
+                    let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/', $graphic/@s3-path, '/', encode-for-uri($graphic/@file))
                     return
                         epub:cache-image($uri, concat($epub:cache-collection, '/', $graphic/@cache-path), $graphic/@file)
             let $path-to-cached-image := concat($epub:cache-collection, '/', $graphic-binary-uri)
