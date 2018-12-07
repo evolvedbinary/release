@@ -175,7 +175,7 @@ declare function epub:frus-toc-divs($text as element(tei:text)) {
 };
 
 declare function epub:frus-divs($text as element(tei:text)) {
-    $text//tei:div[not(@xml:id = $epub:frus-div-xmlids-to-suppress)]
+    $text//tei:div[@xml:id and not(@xml:id = $epub:frus-div-xmlids-to-suppress)]
 };
 
 (:~
