@@ -7,7 +7,6 @@ import module namespace frus = "http://history.state.gov/ns/site/hsg/frus-html" 
 
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace s3="http://s3.amazonaws.com/doc/2006-03-01/";
-declare namespace httpclient="http://exist-db.org/xquery/httpclient";
 declare namespace functx = "http://www.functx.com"; 
 
 declare option output:method "html5";
@@ -60,7 +59,7 @@ declare function local:update-leaf-directory($directory as xs:string) {
     let $max-keys := ()
     let $prefix := $directory
     let $list := bucket:list($aws_config:AWS-ACCESS-KEY, $aws_config:AWS-SECRET-KEY, $bucket, $delimiter, (), (), $prefix)
-    let $contents := $list/httpclient:body/s3:ListBucketResult/s3:Contents[s3:Key ne $prefix]
+    let $contents := $list[2]/s3:ListBucketResult/s3:Contents[s3:Key ne $prefix]
     let $resources := 
         <resources prefix="{$prefix}">{
             local:contents-to-resources($contents)
@@ -81,7 +80,7 @@ declare function local:update-leaf-directory($directory as xs:string) {
                 (
                 <p class="bg-success">Stored {xmldb:store($target-collection, 'resources.xml', $resources)}</p>
                 ,
-                <pre>{serialize($resources)}</pre>
+                <pre>{serialize($resources, map { "indent": true() })}</pre>
                 )
         } catch * {
                 let $error := concat('Error while fetching S3 Resources for ', $directory, ': ', 
