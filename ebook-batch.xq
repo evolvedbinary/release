@@ -151,7 +151,7 @@ let $body :=
     <div>
         <h2>{$titles[2]}</h2>
         {
-            if (not(sm:is-dba(xmldb:get-current-user()))) then
+            if (not(sm:is-dba(sm:id()/sm:id/sm:real/sm:username/string()))) then
                 <p class="bg-danger">This resource is limited to admin users.</p>
             else if ($new-volumes) then
                 (
