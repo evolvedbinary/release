@@ -80,10 +80,9 @@ declare function local:generate-shell($vol-ids) {
                             <docDate>{($vol/*:published-year[. ne '']/string(), '???')[1]}</docDate>
                             DEPARTMENT OF STATE O<hi rend="smallcaps">ffice</hi>
                             <hi rend="smallcaps">of</hi>
-                            <hi rend="smallcaps">the</hi> H<hi rend="smallcaps">istorian</hi> B<hi
-                                rend="smallcaps">ureau</hi>
-                            <hi rend="smallcaps">of</hi> P<hi rend="smallcaps">ublic</hi> A<hi
-                                rend="smallcaps">ffairs</hi> For sale by the Superintendent of Documents,
+                            <hi rend="smallcaps">the</hi> H<hi rend="smallcaps">istorian</hi> F<hi
+                                rend="smallcaps">oreign</hi> S<hi rend="smallcaps">ervice</hi> 
+                            I<hi rend="smallcaps">nstitute</hi> For sale by the Superintendent of Documents,
                             U.S. Government Publishing Office Internet: bookstore.gpo.gov Phone: toll free
                             (866) 512-1800; DC area (202) 512-1800 Fax: (202) 512-2250 Mail: Stop IDCC,
                             Washington, DC 20402-0001</docImprint>
@@ -91,8 +90,8 @@ declare function local:generate-shell($vol-ids) {
                     <div xml:id="pressrelease" type="section">
                         <head>Press Release</head>
                         <p rend="right">
-                            <hi rend="strong">Office of the Historian<lb/>Bureau of Public
-                                Affairs<lb/>United States Department of State<lb/>??? ???, {($vol/*:published-year/string(), '???')[1]}</hi>
+                            <hi rend="strong">Office of the Historian<lb/> Foreign Service Institute<lb/> 
+                            United States Department of State<lb/>??? ???, {($vol/*:published-year/string(), '???')[1]}</hi>
                         </p>
                         {
                             let $paragraphs := $vol/*:summary/*:p[. ne '']

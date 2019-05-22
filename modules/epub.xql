@@ -91,7 +91,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
     let $item := doc($path-to-tei-document)
     let $titles := $item//tei:titleStmt/tei:title
     let $title := normalize-space(concat($titles[@type eq 'volume'], ' (', string-join(($titles[@type eq 'series'], $titles[@type eq 'sub-series'], $titles[@type eq 'volume-number'])[. ne ''], ', '), ')'))
-    let $creator := 'Office of the Historian, Bureau of Public Affairs, United States Department of State'
+    let $creator := 'Office of the Historian, Foreign Service Institute, United States Department of State'
     let $text := $item//tei:text
     let $urn := concat($vol-id, '-', current-dateTime())
     let $db-path-to-resources := '/db/apps/release/resources'
@@ -320,6 +320,8 @@ declare function epub:title-xhtml-entry($volume-id) {
     let $editor-roles-to-display := ('primary', 'general')
     let $editors := $volume/editor[@role = $editor-roles-to-display and . ne '']
     let $published-year := $volume/published-year/string()
+    let $office-name := $volume/office-name/string()
+    let $office-parent := $volume/office-parent/string()
     let $body :=
         <div xmlns="http://www.w3.org/1999/xhtml" id="title">
             <h3>{concat(frus:volume-title($volume-id, 'series'), ', ', frus:volume-title($volume-id, 'sub-series'))}</h3>
@@ -357,8 +359,8 @@ declare function epub:title-xhtml-entry($volume-id) {
             </p>
             <p>
                 U.S. Department of State <br/>
-                Office of the Historian <br/>
-                Bureau of Public Affairs
+                {$office-name} <br/>
+                {$office-parent}
             </p>
             <hr/>
             <p>
