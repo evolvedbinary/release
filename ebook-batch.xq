@@ -152,7 +152,7 @@ let $body :=
         <h2>{$titles[2]}</h2>
         {
             if (not(sm:is-dba(sm:id()/sm:id/sm:real/sm:username/string()))) then
-                <p class="bg-danger">This resource is limited to admin users.</p>
+                <p class="bg-danger">This resource is limited to admin users. Please log in first via <a href="/exist/apps/eXide">eXide</a>.</p>
             else if ($new-volumes) then
                 (
                 local:form($new-volumes, $format)
@@ -193,7 +193,7 @@ let $body :=
                 local:form((), $format),
                 <p>Please enter volume IDs, one per line. (Click <a href="?volumes=frus1949v01&amp;format=epub">here</a> to try generating frus1949v01 as an epub.)</p>,
                 <p>Before generating Mobi-bound EPUBs, make sure you have installed <a href="http://calibre-ebook.com/download">Calibre</a>.</p>,
-                <p>Generating an ebook can take as much as 5-10 minutes each. Open the Monex <a href="/apps/monex/console.html">Console</a> to follow status updates. If an ebook job is taking too long to generate, you can kill the entire query via the Monex <a href="/apps/monex/index.html">Monitoring</a> tab, under "Running Queries."</p>,
+                <p>Generating an ebook can take as much as 5-10 minutes each. Open the Monex <a href="/exist/apps/monex/console.html">Console</a> to follow status updates. If an ebook job is taking too long to generate, you can kill the entire query via the Monex <a href="/apps/monex/index.html">Monitoring</a> tab, under "Running Queries."</p>,
                 <p>Ebooks are saved on your hard disk at: <code>{$output-directory}</code>.</p>
                 )
         }
