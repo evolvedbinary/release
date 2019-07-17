@@ -530,7 +530,7 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
                             </p>
                     return
                         (
-                            render:main($nodes-to-render, ())
+                            render:main($nodes-to-render, $parameters)
                             ,
                             $footnotes
                         )
