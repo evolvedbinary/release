@@ -353,7 +353,7 @@ declare function epub:title-xhtml-entry($volume-id) {
             }
             <hr/>
             <p>
-                United States Government Printing Office <br/>
+                United States Government Publishing Office <br/>
                 Washington <br/>
                 {$published-year}
             </p>
