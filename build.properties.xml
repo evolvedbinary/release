@@ -4,7 +4,7 @@
         <name>release</name>
         <url>http://history.state.gov/ns/apps/release</url>
         <title>Release</title>
-        <version>0.3</version>
+        <version>0.4</version>
     </app>
     <trigger>
         <provider-url>
