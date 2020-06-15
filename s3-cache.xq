@@ -116,7 +116,6 @@ declare function local:validate($vol-ids as xs:string*) {
         else $vol-id
 };
 
-let $login := xmldb:login('/db', 'admin', '') (: TODO: hook in proper login form :)
 let $titles := ('Release', 'S3 Cache Helper')
 let $new-volumes := request:get-parameter('volumes', ())
 let $body := 

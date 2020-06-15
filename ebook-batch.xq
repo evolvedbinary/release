@@ -19,6 +19,8 @@ declare function local:output-directory() {
 };
 
 declare function local:generate-mobis() {
+    let $log := console:log('starting conversion of mobi-bound epubs to mobi by calling calibre ebook-convert script')
+    let $start-time := util:system-time()
     let $script := '# enter the source directory
 
 cd mobi-bound;
@@ -36,11 +38,40 @@ mv *.mobi ../mobi/;'
         <option>
             <workingDir>{local:output-directory()}</workingDir>
         </option>
-    let $execute := process:execute(("sh", "./convert-mobis.sh"), $options)
-    let $output := $execute/stdout/line
-    let $newline := '&#10;'
+    let $execute := try { process:execute(("sh", "./convert-mobis.sh"), $options) } catch * { <error>Error {$err:code} raised when running convert-mobis.sh: {$err:description}</error> }
+    let $log := console:log('finished calibre ebook-convert script')
+    let $end-time := util:system-time()
+    let $duration := $end-time - $start-time
+    let $minutes := minutes-from-duration($duration)
+    let $seconds := seconds-from-duration($duration)
     return
-        <pre>{string-join($output, $newline)}</pre>
+        if ($execute instance of element(execution)) then
+            if ($execute/@exitCode eq "0") then
+                (
+                    <p class="bg-success">{
+                        concat('Completed conversion of mobi-bound epub(s) in ', if ($minutes gt 0) then concat($minutes, ' minutes, ') else (), $seconds, ' seconds.')
+                    }</p>,
+                    <pre>{
+                        let $output := $execute/stdout/line
+                        let $newline := '&#10;'
+                        return
+                            string-join($output, $newline)
+                    }</pre>
+                )
+            else
+                (
+                    <p class="bg-danger">{
+                        concat('Conversion of mobi-bound epub(s) to mobi failed after ', if ($minutes gt 0) then concat($minutes, ' minutes, ') else (), $seconds, ' seconds.')
+                    }</p>,
+                    <pre>{
+                        let $output := $execute/stdout/line
+                        let $newline := '&#10;'
+                        return
+                            string-join($output, $newline)
+                    }</pre>
+                )
+        else (: if ($execute instance of element(error)) :)
+            <p class="bg-danger">{$execute/string()}</p>
 };
 
 declare function local:generate-ebooks($vol-ids, $format) {
@@ -146,14 +177,11 @@ let $titles := ('Release', 'Ebook Batch Helper')
 let $new-volumes := request:get-parameter('volumes', ())
 let $format := request:get-parameter('format', 'all')
 let $output-directory := local:output-directory()
-let $login := xmldb:login('/db', 'admin', '') (: TODO: hook in proper login form :)
 let $body :=
     <div>
         <h2>{$titles[2]}</h2>
         {
-            if (not(sm:is-dba(sm:id()/sm:id/sm:real/sm:username/string()))) then
-                <p class="bg-danger">This resource is limited to admin users. Please log in first via <a href="/exist/apps/eXide">eXide</a>.</p>
-            else if ($new-volumes) then
+            if (exists($new-volumes)) then
                 (
                 local:form($new-volumes, $format)
                 ,
@@ -191,9 +219,9 @@ let $body :=
             else
                 (
                 local:form((), $format),
-                <p>Please enter volume IDs, one per line. (Click <a href="?volumes=frus1949v01&amp;format=epub">here</a> to try generating frus1949v01 as an epub.)</p>,
-                <p>Before generating Mobi-bound EPUBs, make sure you have installed <a href="http://calibre-ebook.com/download">Calibre</a>.</p>,
-                <p>Generating an ebook can take as much as 5-10 minutes each. Open the Monex <a href="/exist/apps/monex/console.html">Console</a> to follow status updates. If an ebook job is taking too long to generate, you can kill the entire query via the Monex <a href="/apps/monex/index.html">Monitoring</a> tab, under "Running Queries."</p>,
+                <p>Please enter volume IDs, one per line. (Click <a href="?volumes=frus1969-76v18&amp;format=epub">here</a> to try generating frus1969-76v18 as an epub.)</p>,
+                <p>Before generating Mobi-bound EPUBs, make sure you have installed <a href="https://calibre-ebook.com/download">Calibre</a>.</p>,
+                <p>Generating an ebook can take as much as 5-10 minutes each (or even longer for volumes with page-number-based back-of-book indexes). Open the Monex <a href="/exist/apps/monex/console.html">Console</a> to follow status updates. If an ebook job is taking too long to generate, you can kill the entire query via the Monex <a href="/apps/monex/index.html">Monitoring</a> tab, under "Running Queries."</p>,
                 <p>Ebooks are saved on your hard disk at: <code>{$output-directory}</code>.</p>
                 )
         }
