@@ -13,6 +13,8 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 import module namespace xslfo="http://exist-db.org/xquery/xslfo";
 import module namespace frus = "http://history.state.gov/ns/xquery/frus" at "frus.xql";
+import module namespace hsg-config = "http://history.state.gov/ns/xquery/config" at '/db/apps/hsg-shell/modules/config.xqm';
+
 import module namespace functx = "http://www.functx.com"; 
 
 declare variable $t2f:fop-config := 
@@ -1421,7 +1423,7 @@ declare function t2f:graphic($node, $options) {
             concat($images-collection, '/', $url, '.png')
         else
             for $ext in ('svg', 'tiff', 'png')
-            let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
+            let $uri := concat($hsg-config:S3_URL || '/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
             let $response := httpclient:head(xs:anyURI($uri), false(), ())
             return
                 if ($response/@statusCode eq '200') then 

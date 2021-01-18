@@ -19,6 +19,7 @@ xquery version "3.0";
 module namespace render="http://history.state.gov/ns/xquery/tei-render";
 
 import module namespace frusx = "http://history.state.gov/ns/xquery/frus" at "frus.xql";
+import module namespace hsg-config = "http://history.state.gov/ns/xquery/config" at '/db/apps/hsg-shell/modules/config.xqm';
 import module namespace console="http://exist-db.org/xquery/console";
 import module namespace functx = "http://www.functx.com";
 
@@ -1357,7 +1358,7 @@ declare function render:pb($node as element(tei:pb), $options) as item()* {
             if ($frusx:STATIC-FILE-LOCATION eq 'local') then '/historicaldocuments/'
             else if ($frusx:STATIC-FILE-LOCATION eq 'hsg') then 'http://history.state.gov/historicaldocuments/'
             else (: if ($frus:STATIC-FILE-LOCATION eq 's3') then :)
-                'https://s3.amazonaws.com/static.history.state.gov/frus/'
+                $hsg-config:S3_URL || '/frus/'
         let $imagepath :=
             if ($frusx:STATIC-FILE-LOCATION = ('local', 'hsg')) then
                 concat($fruspageimagerelativepath, $volume, "/media/medium/")
