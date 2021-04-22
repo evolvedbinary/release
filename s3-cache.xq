@@ -13,6 +13,8 @@ declare namespace functx = "http://www.functx.com";
 declare option output:method "html5";
 declare option output:media-type "text/html";
 
+declare variable $local:bucket := $hsg-config:S3_BUCKET;
+
 declare function functx:substring-after-last-match 
   ( $arg as xs:string? ,
     $regex as xs:string )  as xs:string {
