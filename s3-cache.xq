@@ -4,6 +4,7 @@ import module namespace release = "http://history.state.gov/ns/xquery/release" a
 import module namespace aws_config = "http://history.state.gov/ns/xquery/aws_config" at '/db/apps/s3/modules/aws_config.xqm';
 import module namespace bucket = 'http://www.xquery.co.uk/modules/connectors/aws/s3/bucket' at '/db/apps/s3/modules/xaws/modules/uk/co/xquery/www/modules/connectors/aws-exist/s3/bucket.xq';
 import module namespace frus = "http://history.state.gov/ns/site/hsg/frus-html" at "/db/apps/hsg-shell/modules/frus-html.xqm";
+import module namespace hsg-config = "http://history.state.gov/ns/site/hsg/config" at "/db/apps/hsg-shell/modules/config.xqm";
 
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace s3="http://s3.amazonaws.com/doc/2006-03-01/";
@@ -53,7 +54,7 @@ declare function local:mkcol($collection, $path) {
 (: provide this function a directory like 'frus/frus1964-68v12/ebook/' and it will update 
 the existing cache of that directory's contents :)
 declare function local:update-leaf-directory($directory as xs:string) {
-    let $bucket := 'static.history.state.gov'
+    let $bucket := $local:bucket
     let $delimiter := '/'
     let $marker := ()
     let $max-keys := ()

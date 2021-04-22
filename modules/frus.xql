@@ -11,10 +11,13 @@ xquery version "3.1";
 module namespace frus = "http://history.state.gov/ns/xquery/frus";
 
 import module namespace functx = "http://www.functx.com";
+import module namespace hsg-config = "http://history.state.gov/ns/site/hsg/config" at "/db/apps/hsg-shell/modules/config.xqm";
 import module namespace render = "http://history.state.gov/ns/xquery/tei-render" at "tei-render.xql";
 import module namespace util= "http://exist-db.org/xquery/util";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
+
+declare variable $local:bucket := $hsg-config:S3_BUCKET;
 
 (: TODO:
  : - continue refactoring historicaldocuments.xq to remove repetitive code that can be centralized here
@@ -164,20 +167,20 @@ declare function frus:exists-pdf($volumeid as xs:string) as xs:boolean {
     if ($frus:STATIC-FILE-LOCATION = 'local') then
         util:binary-doc-available(frus:pdf-db-path($volumeid))
     else (: if ($frusx:STATIC-FILE-LOCATION = 's3') then :)
-        let $collection := '/db/history/data/s3-resources/static.history.state.gov/frus/'
+        let $collection := '/db/history/data/s3-resources/' || $local:bucket || '/frus/'
         let $pdf-filename := concat($volumeid, '.pdf')
         return
             exists(collection($collection)//filename[. = $pdf-filename])
 };
 
 declare function frus:volumes-with-ebooks() {
-    for $hit in collection('/db/history/data/s3-resources/static.history.state.gov/frus/')//filename[ends-with(., '.epub')]
+    for $hit in collection('/db/history/data/s3-resources/' || $local:bucket || '/frus/')//filename[ends-with(., '.epub')]
     return
         substring-before($hit, '.epub')
 };
 
 declare function frus:volumes-with-single-pdfs() {
-    for $hit in collection('/db/history/data/s3-resources/static.history.state.gov/frus/')//filename[ends-with(.,'.pdf')][starts-with(., 'frus')]
+    for $hit in collection('/db/history/data/s3-resources/' || $local:bucket || '/frus/')//filename[ends-with(.,'.pdf')][starts-with(., 'frus')]
     return
         substring-before($hit, '.pdf')
 };
@@ -190,7 +193,7 @@ declare function frus:exists-ebook($volumeid as xs:string) as xs:boolean {
     if ($frus:STATIC-FILE-LOCATION = ('local', 'hsg')) then
         exists(doc('/db/history/data/historicaldocuments/ebooks.xml')//ebook[@id eq $volumeid])
     else (: if ($frusx:STATIC-FILE-LOCATION = 's3') then :)
-        let $collection := concat('/db/history/data/s3-resources/static.history.state.gov/frus/', $volumeid, '/ebook')
+        let $collection := concat('/db/history/data/s3-resources/' || $local:bucket || '/frus/', $volumeid, '/ebook')
         let $epub-filename := concat($volumeid, '.epub')
         return
             exists(collection($collection)//filename[. = $epub-filename])
@@ -205,14 +208,14 @@ declare function frus:mobi-url($volumeid as xs:string) as xs:string {
 };
 
 declare function frus:epub-size($volumeid as xs:string) {
-    let $epub := (doc(concat('/db/history/data/s3-resources/static.history.state.gov/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.epub')]/parent::resource)[1]
+    let $epub := (doc(concat('/db/history/data/s3-resources/' || $local:bucket || '/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.epub')]/parent::resource)[1]
     let $size := $epub//size
     return
         frus:bytes-to-readable($size)
 };
 
 declare function frus:mobi-size($volumeid as xs:string) {
-    let $mobi := (doc(concat('/db/history/data/s3-resources/static.history.state.gov/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.mobi')]/parent::resource)[1]
+    let $mobi := (doc(concat('/db/history/data/s3-resources/' || $local:bucket || '/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.mobi')]/parent::resource)[1]
     let $size := $mobi//size
     return
         frus:bytes-to-readable($size)
@@ -234,7 +237,7 @@ declare function frus:bytes-to-readable($bytes as xs:integer) {
 
 declare function frus:ebook-last-updated($volumeid as xs:string) {
     let $epub-filename := concat($volumeid, '.epub')
-    let $epub := (doc(concat('/db/history/data/s3-resources/static.history.state.gov/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.epub')]/parent::resource)[1]
+    let $epub := (doc(concat('/db/history/data/s3-resources/' || $local:bucket || '/frus/', $volumeid, '/ebook/resources.xml'))//filename[ends-with(., '.epub')]/parent::resource)[1]
     return
         $epub/last-modified/string()
 };
@@ -243,7 +246,7 @@ declare function frus:exists-doc-pdf($volumeid, $document) as xs:boolean {
     if ($frus:STATIC-FILE-LOCATION = ('local', 'hsg')) then
         util:binary-doc-available(concat(frus:pdf-collection($volumeid), '/', $document, '.pdf'))
     else (: if ($frusx:STATIC-FILE-LOCATION = 's3') then :)
-        collection(concat('/db/history/data/s3-resources/static.history.state.gov/frus/', $volumeid, '/pdf/'))//filename = concat($document, '.pdf')
+        collection(concat('/db/history/data/s3-resources/' || $local:bucket || '/frus/', $volumeid, '/pdf/'))//filename = concat($document, '.pdf')
 };
 
 declare function frus:pdf-db-path($volumeid as xs:string) as xs:string {
@@ -265,7 +268,7 @@ declare function frus:pdf-size($volumeid as xs:string) {
     if ($frus:STATIC-FILE-LOCATION = 'local') then
         frus:file-size(frus:pdf-collection($volumeid), frus:pdf-filename($volumeid))
     else (: if ($frusx:STATIC-FILE-LOCATION = 's3') then :)
-        frus:bytes-to-readable(collection('/db/history/data/s3-resources/static.history.state.gov/frus/')//filename[. eq frus:pdf-filename($volumeid)]/following-sibling::size)
+        frus:bytes-to-readable(collection('/db/history/data/s3-resources/' || $local:bucket || '/frus/')//filename[. eq frus:pdf-filename($volumeid)]/following-sibling::size)
 };
 
 declare function frus:isbn($volumeid as xs:string) as text()* {
