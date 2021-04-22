@@ -1357,7 +1357,7 @@ declare function render:pb($node as element(tei:pb), $options) as item()* {
             if ($frusx:STATIC-FILE-LOCATION eq 'local') then '/historicaldocuments/'
             else if ($frusx:STATIC-FILE-LOCATION eq 'hsg') then 'http://history.state.gov/historicaldocuments/'
             else (: if ($frus:STATIC-FILE-LOCATION eq 's3') then :)
-                'https://s3.amazonaws.com/static.history.state.gov/frus/'
+                'https://static.history.state.gov/frus/'
         let $imagepath :=
             if ($frusx:STATIC-FILE-LOCATION = ('local', 'hsg')) then
                 concat($fruspageimagerelativepath, $volume, "/media/medium/")

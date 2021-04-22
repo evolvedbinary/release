@@ -1421,7 +1421,7 @@ declare function t2f:graphic($node, $options) {
             concat($images-collection, '/', $url, '.png')
         else
             for $ext in ('svg', 'tiff', 'png')
-            let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
+            let $uri := concat('https://static.history.state.gov/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
             let $response := httpclient:head(xs:anyURI($uri), false(), ())
             return
                 if ($response/@statusCode eq '200') then 

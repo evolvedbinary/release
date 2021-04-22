@@ -41,14 +41,14 @@ declare variable $frus:PAGEIMAGES-DB-PATH := '/db/fruspageimages/';
 (: URL path to PDFs :)
 declare variable $frus:PDF-URL-PATH :=
     if ($frus:STATIC-FILE-LOCATION eq 'local') then '/historicaldocuments/'
-    else if ($frus:STATIC-FILE-LOCATION eq 's3') then '//s3.amazonaws.com/static.history.state.gov/frus/'
+    else if ($frus:STATIC-FILE-LOCATION eq 's3') then '//static.history.state.gov/frus/'
     else (: hsg :) '//history.state.gov/historicaldocuments/'
 ;
 
 (: URL path to PDFs :)
 declare variable $frus:PAGEIMAGES-URL-PATH :=
     if ($frus:STATIC-FILE-LOCATION eq 'local') then '/historicaldocuments/'
-    else if ($frus:STATIC-FILE-LOCATION eq 's3') then '//s3.amazonaws.com/static.history.state.gov/frus/'
+    else if ($frus:STATIC-FILE-LOCATION eq 's3') then '//static.history.state.gov/frus/'
     else (: hsg :) '//history.state.gov/historicaldocuments/'
 ;
 

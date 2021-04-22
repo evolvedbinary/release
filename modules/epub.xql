@@ -99,7 +99,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
         if (util:binary-doc-available(concat($images-collection, '/', $vol-id, '.jpg'))) then
             concat($images-collection, '/', $vol-id, '.jpg')
         else
-            let $href := concat('https://s3.amazonaws.com/static.history.state.gov/frus/', $vol-id, '/covers/', $vol-id, '.jpg')
+            let $href := concat('https://static.history.state.gov/frus/', $vol-id, '/covers/', $vol-id, '.jpg')
             let $request := <hc:request href="{$href}" method="head" http-version="1.1"/>
             let $response := hc:send-request($request)
             return
@@ -806,7 +806,7 @@ declare function epub:cache-all-images($text) {
                 if (util:binary-doc-available(concat($epub:cache-collection, '/', $graphic/@cache-path, '/', $graphic/@file))) then
                     concat($graphic/@cache-path, '/', $graphic/@file)
                 else
-                    let $uri := concat('https://s3.amazonaws.com/static.history.state.gov/', $graphic/@s3-path, '/', encode-for-uri($graphic/@file))
+                    let $uri := concat('https://static.history.state.gov/', $graphic/@s3-path, '/', encode-for-uri($graphic/@file))
                     return
                         epub:cache-image($uri, concat($epub:cache-collection, '/', $graphic/@cache-path), $graphic/@file)
             let $path-to-cached-image := concat($epub:cache-collection, '/', $graphic-binary-uri)
