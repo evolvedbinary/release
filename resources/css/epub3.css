@@ -290,27 +290,7 @@ ul {
     padding-top: .2em;
     padding-bottom: .2em;
 }
-/* "Subject" lists are small caps with space below */
-ul.subject {
-    font-size: .9em;
-    margin-left: 0;
-}
-ul.sub-list {
-    font-size: 1em;
-}
-li > ul {
-/*    margin-inline-start: -2em;*/
-}
-ul.subject li {
-    text-indent: -4em;
-    padding-left: 4em;
-}
-ul.subject li.subjectallcaps {
-    text-indent: 0;
-    padding-left: 0;
-    font-variant: small-caps;
-    /*margin-inline-start: -2em;*/
-}
+
 /* for 1952-54 subjects - TODO: test once 1st volume is received */
 li.subjectflushleft {
     padding-bottom: 1em;

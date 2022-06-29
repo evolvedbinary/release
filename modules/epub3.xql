@@ -465,6 +465,21 @@ declare function local:update-text-node($config, $node, $skip-nesting) {
             $node/node()
         )}
         case element(tei:head) return
+            if ($node/parent::tei:list) then
+                (: tei-publisher-lib does not render head in list for now :)
+                <tei:item>{
+                    $node/@* except $node/@rend,
+                    attribute rend {
+                        $node/@rend,
+                        if ($node/ancestor::tei:list/@type = ('participants', 'subject', 'from', 'references', 'to') ) then
+                            "subjectallcaps"
+                        else
+                            ()
+                    }, 
+                    for $child-node in $node/node()
+                        return local:update-text-node($config, $child-node)
+                }</tei:item>
+            else
             let $attr := if ($node/parent::tei:div[./*[1] = $node][./parent::tei:front]) then
                 attribute rend { "front-title" }
             else
@@ -550,44 +565,38 @@ declare function local:update-text-node($config, $node, $skip-nesting) {
                     },
                     $result[2]
                 )
-        case element(tei:item) return element {node-name($node)} {(
-            $node/@*, if ($node/parent::tei:list/*[1][local-name()!="head"] and $node/parent::tei:list/@type = ('participants', 'subject', 'from', 'references', 'to') ) then
-                attribute rend { "subjectallcaps" }
-            else (),
+        case element(tei:item) return
+            let $rend := attribute rend {
+                $node/@rend,
+                if ($node/parent::tei:list/@type = 'subject' and $node/parent::tei:list/@rend = 'flushleft') then
+                    "subjectflushleft" else ()
+            }
+            return element {node-name($node)} {(
+                $node/@* except $node/@rend, $rend,
                 for $child-node in $node/node()
                     return local:update-text-node($config, $child-node)
             )}
         case element(tei:list) return
-            let $list-rend := if ($node/@type) then switch ($node/@type)
+            let $list-rend := if ($node/@type) then
+                switch ($node/@type)
                 case 'index' return "index"
                 case 'indexentry' return "indexentry"
                 case 'ordered' return "customorder"
                 case 'bulleted' return "bulleted"
-                default return if ($node/@type = ('participants', 'subject', 'from', 'references', 'to')) then "subject" else ()
-            else ()
-            let $item-rend := if (($node/@type, $node/ancestor::tei:list/@type) = ('participants', 'subject', 'from', 'references', 'to')) then "subjectallcaps" else ()
+                    default return
+                        if ($node/@type = ('participants', 'subject', 'from', 'references', 'to')) then
+                            "subject"
+                        else
+                            ()
+                else
+                    ()
             let $list-attr := (
-                $node/@*[local-name() != 'rend'][local-name() != 'type'], 
-                attribute rend { if ($list-rend) then ($node/@rend, $list-rend) else $node/@rend }
+                $node/@* except $node/@rend, 
+                attribute rend { $node/@rend, if ($list-rend) then $list-rend else () }
             )
-            let $item-attr := if ($item-rend) then (attribute rend { $item-rend }) else ()
-            return if ($node/*[1][local-name()="head"]) then element {node-name($node)} {(
-                $list-attr, $node/@type,
-                <tei:item>{$item-attr[local-name() != 'rend'], attribute rend { ($item-attr[local-name() = 'rend'], "sub-list") },
-                    $node/tei:head/node()}</tei:item>,
-                    for $child-node in $node/node()[./tei:list] return
-                        local:update-text-node($config, $child-node)
-                    ,
-                    <tei:item>
-                    <tei:list>{$list-attr[local-name() != 'rend'], attribute rend { ($list-attr[local-name() = 'rend'], "sub-list") }}
-                        {for $child-node in $node/node()[not(local-name()="head")][not(./tei:list)] return
-                            local:update-text-node($config, $child-node)
-                        }
-                    </tei:list>
-                </tei:item>
-            )}
-            else element {node-name($node)} {(
-                $node/@*,
+            return
+                element {node-name($node)} {(
+                    $list-attr,
                 for $child-node in $node/node()
                     return local:update-text-node($config, $child-node)
             )}
