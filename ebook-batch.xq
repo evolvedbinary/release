@@ -14,10 +14,9 @@ declare option output:method "html";
 declare option output:media-type "text/html";
 
 declare function local:output-directory() {
-    '/tmp/'
-(:    let $username := environment-variable('USER'):)
-(:    return:)
-(:        concat('/Users/', $username, '/Downloads/frus-ebooks-', substring(xs:string(current-date()), 1, 10), '/'):)
+    let $username := environment-variable('USER')
+    return
+        concat('/Users/', $username, '/Downloads/frus-ebooks-', substring(xs:string(current-date()), 1, 10), '/')
 };
 
 declare function local:generate-mobis() {
