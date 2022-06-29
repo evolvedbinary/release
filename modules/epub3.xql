@@ -772,18 +772,18 @@ declare function local:title-xhtml($config) {
             }
             <tei:milestone/>
             <tei:p>
-                United States Government Publishing Office <tei:pb/>
-                Washington <tei:pb/>
+                United States Government Publishing Office <tei:lb/>
+                Washington <tei:lb/>
                 {$published-year}
             </tei:p>
             <tei:p>
-                U.S. Department of State <tei:pb/>
-                {$office-name} <tei:pb/>
+                U.S. Department of State <tei:lb/>
+                {$office-name} <tei:lb/>
                 {$office-parent}
             </tei:p>
             <tei:milestone/>
             <tei:p>
-                This ebook was generated on {format-date(current-date(), "[MNn] [D1], [Y0001]")}.<tei:pb/>
+                This ebook was generated on {format-date(current-date(), "[MNn] [D1], [Y0001]")}.<tei:lb/>
                 Please visit the Office of the Historian <tei:ref target="http://history.state.gov/historicaldocuments/ebooks">ebooks web page</tei:ref> to access updates.
             </tei:p>
         </tei:div>

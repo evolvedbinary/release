@@ -148,6 +148,12 @@ a.ref-title {
 .italic {
     font-style: italic;
 }
+.bold {
+    font-weight: bold;
+}
+.underline {
+    text-decoration: underline;
+}
 /* ====1. FRUS Document div Styles==== */
 /* For ePubs, we use each device's default for divs */
 
