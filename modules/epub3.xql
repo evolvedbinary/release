@@ -648,7 +648,6 @@ declare function local:update-text-node($config, $node, $skip-nesting) {
                                 <div>
                                     <ul>{
                                         for $document in $node/tei:div[@type='chapter']
-                                        let $docnumber := frus:document-number($document)
                                         let $docid := frus:document-id($document)
                                         let $doctitle := frus:document-head-sans-number($document)
                                         let $docsource := frus:source-note($document)/string()
@@ -656,7 +655,7 @@ declare function local:update-text-node($config, $node, $skip-nesting) {
                                         let $docsummary := $document//tei:note[@type='summary']/string()
                                         return (
                                             <tei:milestone/>,
-                                            <tei:ref rend="ref-title" target="#{$docid}">{if (not(starts-with($document/tei:head, concat($document/@n, '.')))) then concat('[', $docnumber, ']') else concat($docnumber, '. '), $doctitle}</tei:ref>,
+                                            <tei:ref rend="ref-title" target="#{$docid}">{$doctitle}</tei:ref>,
                                             <opener><p class="dateline">{$docdateline}</p></opener>,
                                             if (exists($docsummary)) then <p>{$docsummary}</p> else (),
                                             <p class="sourcenote">{$docsource}</p>
