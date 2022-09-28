@@ -274,6 +274,12 @@ declare function local:update-nav($nodes) {
                     $node/@*,
                     local:update-nav($node/node())
                 )}
+            case element(xhtml:a) return
+                let $id := substring-after($node/@href/string(), '#')
+                return if (matches($id, "^d\d+$")) then element {node-name($node)} {(
+                    $node/@*,
+                    concat('[', substring-after($id, 'd'), '] ', $node/text())
+                )} else $node
             default return element {node-name($node)} {(
                 $node/@*,
                 for $child in $node/node()
@@ -281,14 +287,47 @@ declare function local:update-nav($nodes) {
             )}
 };
 
+declare function local:update-navmap($nodes) {
+    for $node in $nodes
+        return typeswitch ($node)
+            case text() return $node
+            default return
+                if (name($node)='navPoint') then
+                    element {node-name($node)} {
+                        $node/@*,
+                        for $child-node in $node/node() return
+                            if (name($child-node)='navLabel') then
+                                let $id := $node/@id/string()
+                                return if (matches($id, "^navpoint-d\d+$")) then
+                                    element {node-name($child-node)} {
+                                        $child-node/@*,
+                                        let $text := $child-node/node()[name()='text']
+                                        return element {node-name($text)} {
+                                            $text/@*,
+                                            concat('[', substring-after($id, 'navpoint-d'), '] ', $text/text())
+                                        }
+                                    }
+                                else
+                                    $child-node
+                            else
+                                local:update-navmap($child-node)
+                    }
+                else
+                element {node-name($node)} {(
+                    $node/@*,
+                    for $child in $node/node()
+                        return local:update-navmap($child)
+                )}
+};
+
 declare function local:update-toc($nodes) {
     for $node in $nodes
         return typeswitch ($node)
             case text() return $node
-            case element(ncx:navMap) return
+            case element(ncx:navMap) return 
                 element {node-name($node)} {(
                     $node/@*,
-                    $node/node()[not(@id="navpoint-title")][not(./text()="Title")]
+                    local:update-navmap($node/node())
                 )}
             default return element {node-name($node)} {(
                 $node/@*,
@@ -632,8 +671,8 @@ declare function local:update-text-node($config, $node, $skip-nesting) {
                     (
                         element {node-name($node/tei:head)} {(
                             (
-                              $node/tei:head/@*,
-                              attribute rend { if ($node/parent::tei:body) then "compilation-title" else "chapter-title" }
+                                $node/tei:head/@*,
+                                attribute rend { if ($node/parent::tei:body) then "compilation-title" else "chapter-title" }
                             ),
                             $node/tei:head/node()
                         )}
