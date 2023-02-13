@@ -2,8 +2,14 @@
 <collection xmlns="http://exist-db.org/collection-config/1.0">
     <index xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <lucene>
-            <!-- The standard analyzer will ignore stopwords like 'the', 'and' -->
-            <analyzer class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+            <analyzer class="com.evolvedbinary.lucene.analyzer.OhAnalyzer">
+                <param name="punctuationDictionary" type="char[]">
+                    <value>'</value>
+                    <value>-</value>
+                    <value>’</value>
+                </param>
+                <param name="minimumTermLength" type="int" value="2"/>
+            </analyzer>
             <analyzer id="ws" class="org.apache.lucene.analysis.core.WhitespaceAnalyzer"/>
             <text qname="name"/>
         </lucene>
